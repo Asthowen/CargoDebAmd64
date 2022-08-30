@@ -1,35 +1,37 @@
-# `cargo deb` Build Environment (ubuntu amd64)
+<!--suppress HtmlDeprecatedAttribute -->
+<h1 align="center">
+  CargoDebAmd64
+</h1>
+<h3 align="center">
+    <strong>Action for creating .deb package for Rust projects using cargo-deb for AMD64.</strong>
+</h3>
 
-Provides a build environment for executing `cargo deb` [1] and producing statically linked binaries for the built Debian (`.deb`) package.
+> This repository is a simple fork of [cargo-deb-amd64-ubuntu](https://github.com/ebbflow-io/cargo-deb-amd64-ubuntu/).
 
-[1] Cargo Deb provided by mmstick
-- https://github.com/mmstick/cargo-deb
-- https://crates.io/crates/cargo-deb
+Provides a build environment for executing `cargo-deb` and producing statically linked binaries for the built Debian (`.deb`) package.
 
 **NOTE**: This package may fail to build your project if your build links against other OS-provided libraries. The underlying OS image is provided by [muslrust](https://github.com/clux/muslrust) and if additional packages are needed, please follow up with that project.
 
 ## Inputs
-
 `cmd` - The command to be executed inside the container. Defaults to `cargo deb --target=x86_64-unknown-linux-musl`
 
 ## Outputs
-
 None, besides the `deb` package that is built. The built `.deb` will be located in `target/x86_64-unknown-linux-musl/debian/<DEB>`.
 
 ## Example Usage
-
 ```yaml
-name: Deb Static Build
+name: Build deb package
 
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Deb Build
-      uses: ebbflow-io/cargo-deb-amd64-ubuntu@1.0
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Build .deb
+      uses: asthowen/CargoDebAmd64@main
 ```
-
-A working example can be found in use by Ebbflow to build its client package for various OS and CPU architectures [here](https://github.com/ebbflow-io/ebbflow/blob/master/.github/workflows/continuous-integration.yml).
